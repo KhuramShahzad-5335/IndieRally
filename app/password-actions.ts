@@ -1,5 +1,6 @@
 "use server";
 
+import nodemailer from "nodemailer";
 import { randomBytes } from "node:crypto";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
@@ -9,8 +10,9 @@ import { hash } from "@/lib/auth";
 export async function requestReset(_: string, form: FormData): Promise<string> {
   const email = String(form.get("email") ?? "").trim().toLowerCase();
   if (email.length > 254 || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return "Enter a valid email address.";
-  const { RESET_EMAIL_API_KEY, RESET_EMAIL_FROM, SITE_URL, MONGODB_URI } = process.env;
-  if (!RESET_EMAIL_API_KEY || !RESET_EMAIL_FROM || !SITE_URL || !MONGODB_URI) return "Password reset email is currently unavailable.";
+  const { RESET_EMAIL_API_KEY, RESET_EMAIL_FROM, SITE_URL, MONGODB_URI, RESET_GMAIL_USER, RESET_GMAIL_APP_PASSWORD } = process.env;
+  const gmail = RESET_GMAIL_USER && RESET_GMAIL_APP_PASSWORD;
+  if ((!gmail && (!RESET_EMAIL_API_KEY || !RESET_EMAIL_FROM)) || !SITE_URL || !MONGODB_URI) return "Password reset email is currently unavailable.";
   try {
     const { accounts } = await accountStore();
     const token = randomBytes(32).toString("hex");
@@ -21,11 +23,20 @@ export async function requestReset(_: string, form: FormData): Promise<string> {
       { email, $or: [{ resetRequestedAt: { $lt: new Date(now.getTime() - 300000) } }, { resetRequestedAt: { $exists: false } }] },
       { $set: { resetHash: hash(token), resetExpiresAt: new Date(now.getTime() + 1800000), resetRequestedAt: now } },
     );
-    if (result.modifiedCount) {
+    const subject = "Reset your IndieRally password";
+    const text = "Use this link within 30 minutes to reset your password.\n\n" + link.href + "\n\nIf you did not request this, you can ignore this message.";
+    if (result.modifiedCount && gmail) {
+      const smtp = nodemailer.createTransport({
+        host: "smtp.gmail.com", port: 465, secure: true,
+        auth: { user: RESET_GMAIL_USER, pass: RESET_GMAIL_APP_PASSWORD?.replace(/\s/g, "") },
+        connectionTimeout: 5000, greetingTimeout: 5000, socketTimeout: 8000,
+      });
+      await smtp.sendMail({ from: { name: "IndieRally", address: RESET_GMAIL_USER! }, to: email, subject, text, disableFileAccess: true, disableUrlAccess: true });
+    } else if (result.modifiedCount) {
       const response = await fetch("https://api.resend.com/emails", {
         method: "POST",
         headers: { Authorization: "Bearer " + RESET_EMAIL_API_KEY, "Content-Type": "application/json" },
-        body: JSON.stringify({ from: RESET_EMAIL_FROM, to: [email], subject: "Reset your IndieRally password", text: "Use this link within 30 minutes to reset your password.\n\n" + link.href + "\n\nIf you did not request this, you can ignore this message." }),
+        body: JSON.stringify({ from: RESET_EMAIL_FROM, to: [email], subject, text }),
         signal: AbortSignal.timeout(8000),
       });
       if (!response.ok) console.error("Password reset email rejected", response.status);

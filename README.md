@@ -52,3 +52,7 @@ Articles are maintained in lib/editorial.ts. The three bundled editorial covers 
 ## Founder password reset
 
 Set RESET_EMAIL_API_KEY to a Resend API key and RESET_EMAIL_FROM to a verified sender address. Set SITE_URL to the origin recipients can open. Recovery links expire after 30 minutes and a successful reset invalidates existing founder sessions. Moderator passwords are still managed through ADMIN_PASSWORD.
+
+### Send resets from Gmail
+
+Enable Google 2-Step Verification and generate an app password at https://myaccount.google.com/apppasswords. Set RESET_GMAIL_USER to your Gmail address and RESET_GMAIL_APP_PASSWORD to the generated app password. Use .env.local for local development and Production environment variables on Vercel. Restart locally and redeploy on Vercel. Retain the correct SITE_URL for each environment.
