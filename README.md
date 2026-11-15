@@ -47,7 +47,7 @@ Approved listings are queued for the next Monday at midnight UTC. A request afte
 
 Contact and package requests go to the MongoDB inquiries collection. Moderators can read the latest requests at the existing private moderation route. Packages are quote requests with proposed starting prices, with manual fulfillment.
 
-Articles are maintained in lib/editorial.ts. The three bundled editorial covers are served through Next Image. To use Vercel Blob, set BLOB_READ_WRITE_TOKEN for a public store, run node --env-file=.env.local scripts/upload-editorial.mjs, and set BLOG_BLOB_BASE_URL from its output. Rebuild after setting the origin. Local covers are sourced from Unsplash.
+Articles are managed at /admin/blog and stored in MongoDB blogPosts. Seven starter guides are available; npm run blog:seed imports missing guides without overwriting edits. Covers and inline images use Next Image, with admin uploads to a public Vercel Blob store. See [blog editing and image setup](docs/blog-and-images.md) for configuration, migration, publishing, and checks.
 
 ## Founder password reset
 

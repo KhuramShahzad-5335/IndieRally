@@ -1,3 +1,4 @@
+import { cover } from "@/lib/editorial";
 import { pageMetadata } from "@/lib/seo";
 import Image from "next/image";
 import Link from "next/link";
@@ -25,7 +26,7 @@ export default function Directories() {
         </div>
       </div>
       <div className="relative isolate flex min-h-[240px] items-end overflow-hidden bg-[#252525] p-5 sm:p-8 lg:min-h-[460px]">
-        <Image src="/editorial/choosing-directories.jpg" fill preload sizes="(min-width: 1024px) 45vw, 100vw" className="-z-20 object-cover grayscale" alt="Open planner on a desk"/>
+        <Image src={cover("choosing-directories")} fill preload sizes="(min-width: 1024px) 45vw, 100vw" className="-z-20 object-cover grayscale" alt="Open planner on a desk"/>
         <div aria-hidden className="absolute inset-0 -z-10 bg-black/25"/>
         <div className="flex items-center gap-3 rounded-md border border-white/25 bg-black/55 px-4 py-3 text-white backdrop-blur-sm"><ClipboardCheck size={20} aria-hidden className="text-white"/><span className="text-sm font-semibold">Track submissions and live links</span></div>
       </div>

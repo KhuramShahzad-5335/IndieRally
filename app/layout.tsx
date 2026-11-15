@@ -13,11 +13,15 @@ import { SiteFooter } from "@/components/layout/site-footer";
 import { Brand } from "@/components/layout/brand";
 
 // analytics relevant imports
-import { Analytics } from "@vercel/analytics/next"
-import { SpeedInsights } from "@vercel/speed-insights/next"
+import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 export const metadata: Metadata = {
-  ...pageMetadata("IndieRally — Discover independent software", siteDescription, "/"),
+  ...pageMetadata(
+    "IndieRally — Discover independent software",
+    siteDescription,
+    "/",
+  ),
   alternates: undefined,
   metadataBase: new URL(siteOrigin()),
   title: {
@@ -26,7 +30,6 @@ export const metadata: Metadata = {
   },
   description:
     "Launch your indie product through a reviewed software directory, weekly launch rounds, and selected spotlights.",
-
 };
 export default async function Layout({
   children,
@@ -37,7 +40,14 @@ export default async function Layout({
   const account = moderator ? null : await currentAccount();
   return (
     <html lang="en" suppressHydrationWarning>
-      <head><script dangerouslySetInnerHTML={{__html:"try{if(localStorage.getItem('indierally-theme')==='monochrome')document.documentElement.dataset.theme='monochrome'}catch{}"}}/></head>
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html:
+              "try{if(localStorage.getItem('indierally-theme')==='monochrome')document.documentElement.dataset.theme='monochrome'}catch{}",
+          }}
+        />
+      </head>
       <body>
         <Analytics />
         <SpeedInsights />
@@ -51,12 +61,15 @@ export default async function Layout({
           <div className="mx-auto w-[calc(100%-48px)] md:w-[90%] max-[590px]:w-[calc(100%-28px)] flex min-h-[72px] items-center justify-between gap-4 max-[590px]:min-h-[62px]">
             <Brand />
             <nav
-              className="hidden items-center gap-5 text-sm min-[1100px]:flex"
+              className="hidden items-center gap-6 text-sm min-[1100px]:flex"
               aria-label="Main"
             >
               <Link href="/explore">Explore</Link>
               <Link href="/directories">Services</Link>
-              <Link href="/blog">Blog</Link><Link href="/about">About</Link><Link href="/pricing">Pricing</Link><Link href="/contact">Contact</Link>
+              <Link href="/blog">Blog</Link>
+              <Link href="/about">About</Link>
+              <Link href="/pricing">Pricing</Link>
+              <Link href="/contact">Contact</Link>
             </nav>
             <div className="flex min-w-0 items-center gap-2">
               <div className="hidden items-center gap-2 min-[1100px]:flex">
@@ -89,7 +102,7 @@ export default async function Layout({
                   </>
                 )}
               </div>
-              
+
               <ThemeToggle />
               <MobileMenu
                 moderator={moderator}
@@ -108,10 +121,3 @@ export default async function Layout({
     </html>
   );
 }
-
-
-
-
-
-
-
