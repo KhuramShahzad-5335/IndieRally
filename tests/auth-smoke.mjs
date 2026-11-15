@@ -32,9 +32,9 @@ try {
   assert.match(await (await get("/dashboard")).text(), /haven’t submitted/);
   assert.equal((await get("/dashboard/unknown")).status,404);
   const name = "Smoke " + randomUUID();
-  await post("/submit",{name,maker:"Smoke Test",website:"https://example.com",tagline:"Checking authenticated submissions",category:"Design",pricing:"Free",description:"A temporary submission for the authenticated workflow smoke test."});
+  await post("/submit",{name,maker:"Smoke Test",website:"https://example.com",tagline:"Checking authenticated submissions",category:"Design",pricing:"Free",description:"A temporary submission for the authenticated workflow smoke test."},1);
   assert.ok((await (await get("/dashboard")).text()).includes(name));
-  await post("/dashboard",{});
+  await post("/dashboard",{},1);
   assert.equal((await get("/dashboard")).headers.get("location"),"/login");
   await post("/login",{email,password});
   assert.ok((await (await get("/dashboard")).text()).includes(name));
@@ -51,3 +51,4 @@ try {
     }
   } finally { await db.close(); }
 }
+
