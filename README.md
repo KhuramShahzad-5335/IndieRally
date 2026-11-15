@@ -60,3 +60,15 @@ Enable Google 2-Step Verification and generate an app password at https://myacco
 ## Code quality and SEO checks
 
 Run `npm run check:unused`, `npm test`, and `npm run build`. After building, run `node tests/seo-smoke.mjs` for read-only rendered metadata checks. See [the codebase audit](docs/codebase-audit.md) for changes and remaining scale and launch considerations. Set SITE_URL to your public HTTPS origin in production, then rebuild so static metadata routes use the correct domain.
+
+## Inquiry inbox and replies
+
+Open /inquiries from the moderation page for the team inbox, or from the user profile for that user's conversations. Inquiries support replies, open/answered/closed status, reopening, and confirmed permanent deletion by either participant. Deletion removes the database conversation for both sides; previously delivered emails remain in mailboxes.
+
+Contact submissions now open their conversation immediately. Signed-in inquiries are restricted to their account owner. Guests must save the private management URL shown after submitting; never share that link publicly. Existing guest inquiries remain available to admins, and the first admin reply emails their private management link. Guest access uses SESSION_SECRET (at least 32 characters); changing that secret invalidates previous guest links. An email address alone does not grant access to an inquiry.
+
+Admin replies use the existing Gmail SMTP credentials, or the optional Resend configuration already used for password recovery. No additional email variables are required. SITE_URL must match the origin recipients can open. Replies are stored before sending, with provider acceptance/failure visible to admins. Failed deliveries can be retried without adding another message. After five minutes, an interrupted send can be unlocked by an admin. Check Sent before retrying an uncertain delivery to avoid duplicates. Provider acceptance is not proof of inbox delivery.
+
+There are no background email workers or incoming-email sync: users should reply through their inquiry link. Threads are limited to 100 replies of 5,000 characters each. Inbox pages show 20 threads at a time. Access and mutation checks run on the server, including for direct server-action requests.
+
+After a production build, run `node tests/inquiries-smoke.mjs` to verify the flow with a temporary isolated MongoDB database and an intercepted email provider. It sends no real mail and cleans up its own test database.

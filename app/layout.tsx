@@ -10,7 +10,11 @@ import { MobileMenu } from "@/components/layout/mobile-menu";
 import "@fontsource-variable/roboto";
 import "./globals.css";
 import { SiteFooter } from "@/components/layout/site-footer";
-import { BrandLogo } from "@/components/layout/brandLogo";
+import { Brand } from "@/components/layout/brand";
+
+// analytics relevant imports
+import { Analytics } from "@vercel/analytics/next"
+import { SpeedInsights } from "@vercel/speed-insights/next"
 
 export const metadata: Metadata = {
   ...pageMetadata("IndieRally — Discover independent software", siteDescription, "/"),
@@ -35,6 +39,8 @@ export default async function Layout({
     <html lang="en" suppressHydrationWarning>
       <head><script dangerouslySetInnerHTML={{__html:"try{if(localStorage.getItem('indierally-theme')==='monochrome')document.documentElement.dataset.theme='monochrome'}catch{}"}}/></head>
       <body>
+        <Analytics />
+        <SpeedInsights />
         <a
           className="absolute -top-24 left-3 z-20 bg-surface p-2 focus:top-3"
           href="#main"
@@ -43,7 +49,7 @@ export default async function Layout({
         </a>
         <header className="sticky top-0 z-10 border-b border-line bg-paper/76 backdrop-blur-[14px]">
           <div className="mx-auto w-[calc(100%-48px)] md:w-[90%] max-[590px]:w-[calc(100%-28px)] flex min-h-[72px] items-center justify-between gap-4 max-[590px]:min-h-[62px]">
-            <BrandLogo />
+            <Brand />
             <nav
               className="hidden items-center gap-5 text-sm min-[1100px]:flex"
               aria-label="Main"

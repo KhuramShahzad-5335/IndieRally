@@ -24,6 +24,8 @@ export async function authenticate(mode: "signup" | "login", _: string, form: Fo
       await startSession(account._id);
     }
   } catch { return "Account access is temporarily unavailable. Try again shortly."; }
+  const inquiry = form.get("inquiry");
+  if (typeof inquiry === "string" && /^[a-f0-9]{24}$/.test(inquiry)) redirect("/inquiries/" + inquiry);
   const vote = form.get("vote"); redirect(typeof vote === "string" && /^[a-z0-9-]{1,100}$/.test(vote) ? "/products/"+vote : "/dashboard");
 }
 export async function signOut() { await endSession(); redirect("/"); }
