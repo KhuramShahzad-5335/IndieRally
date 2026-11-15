@@ -19,6 +19,7 @@ import {
 } from "lucide-react";
 import { useRef } from "react";
 import { signOut } from "@/app/account-actions";
+import { logout as adminSignOut } from "@/app/actions";
 
 export function MobileMenu({
   name,
@@ -70,6 +71,12 @@ export function MobileMenu({
             </button>
           </div>
           <nav aria-label="Mobile navigation" className="w-full gap-6 flex flex-col gap-4">
+            {moderator && <>
+              <Link href="/admin/dashboard" onClick={close} className="flex items-center gap-4 border-b border-line pb-2 font-semibold"><Layers3 size={17} aria-hidden/>Admin dashboard</Link>
+              <Link href="/admin" onClick={close} className="flex items-center gap-4 border-b border-line pb-2 font-semibold"><Plus size={17} aria-hidden/>Product moderation</Link>
+              <Link href="/inquiries" onClick={close} className="flex items-center gap-4 border-b border-line pb-2 font-semibold"><Mail size={17} aria-hidden/>Inquiry inbox</Link>
+              <Link href="/admin/blog" onClick={close} className="flex items-center gap-4 border-b border-line pb-2 font-semibold"><BookOpen size={17} aria-hidden/>Blog management</Link>
+            </>}
             <Link href="/explore" onClick={close} className="flex items-center justify-start gap-2 text-md font-semibold border-b border-gray-300 pb-2 gap-4 hover:bg-soft">
               <Compass size={17} aria-hidden /> Explore
             </Link>
@@ -93,7 +100,9 @@ export function MobileMenu({
             </Link>
           </nav>
           <div className="sticky -bottom-5 row-start-4 grid gap-2 bg-paper pb-[max(12px,env(safe-area-inset-bottom))] w-full">
-            {moderator ? null : name ? (
+            {moderator ? <>
+              <form action={adminSignOut} onSubmit={close}><button className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-md border border-line bg-surface px-4 py-2.5 text-sm font-bold hover:bg-soft"><LogOut size={17} aria-hidden/>Sign out admin</button></form>
+            </> : name ? (
               <>
                 <Link
                   className="inline-flex min-h-11 items-center justify-center gap-2 whitespace-nowrap rounded-md border border-transparent px-4 py-2.5 text-sm font-bold transition-colors motion-reduce:transition-none border-line bg-surface hover:bg-soft"

@@ -16,7 +16,7 @@ export function Vote({ item, voter }: { item: Listing; voter?: string }) {
     );
   const voted = !!voter && item.voters.includes(voter);
   return (
-    <form className="relative z-10" action={upvote.bind(null, item.slug)}>
+    <form className="relative" action={upvote.bind(null, item.slug)}>
       <button
         className="grid min-w-[47px] place-items-center gap-px rounded-md border border-line bg-soft px-1.5 py-[5px] text-xs font-bold hover:bg-[#f0f0f0] hover:text-[#484848] disabled:bg-[#f0f0f0] disabled:text-[#484848]"
         type="submit"

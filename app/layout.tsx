@@ -73,7 +73,14 @@ export default async function Layout({
             </nav>
             <div className="flex min-w-0 items-center gap-2">
               <div className="hidden items-center gap-2 min-[1100px]:flex">
-                {moderator ? null : account ? (
+                {moderator ? (
+                  <Link
+                    className="inline-flex min-h-11 items-center justify-center gap-2 rounded-md border border-line bg-surface px-4 py-2.5 text-sm font-bold hover:bg-soft"
+                    href="/admin/dashboard"
+                  >
+                    Admin dashboard
+                  </Link>
+                ) : account ? (
                   <>
                     <SubmitLink />
                     <Link

@@ -35,4 +35,6 @@ export const articles = [
     ]
   }
 ];
-export const cover = (slug: string) => (process.env.BLOG_BLOB_BASE_URL?.replace(/\/$/, "") || "") + "/editorial/" + slug + ".jpg";
+export const editorialImageBase = "https://txismjecibo2zetc.public.blob.vercel-storage.com";
+export const blogImageBase = () => (process.env.BLOG_BLOB_BASE_URL || editorialImageBase).replace(/\/$/, "");
+export const cover = (slug: string) => blogImageBase() + "/editorial/" + slug + ".jpg";
