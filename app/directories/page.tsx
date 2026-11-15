@@ -1,12 +1,9 @@
+import { pageMetadata } from "@/lib/seo";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, ClipboardCheck, Compass, PenLine, Send } from "lucide-react";
 
-export const metadata = {
-  title: "Directory submission services",
-  description: "Get help researching software directories, preparing copy, and tracking submissions.",
-  alternates: { canonical: "/directories" },
-};
+export const metadata = pageMetadata("Directory submission services", "Get help researching software directories, preparing copy, and tracking submissions.", "/directories");
 
 const services = [
   { icon: Compass, title: "Directory research", detail: "We look for SaaS, AI, developer tool, and niche directories that match your audience. We check their submission requirements before including them in your campaign." },

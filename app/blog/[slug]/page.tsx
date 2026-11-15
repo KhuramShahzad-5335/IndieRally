@@ -1,3 +1,4 @@
+import { pageMetadata, siteOrigin } from "@/lib/seo";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -33,14 +34,17 @@ export async function generateMetadata({ params }: Props) {
   const description =
     article.paragraphs[0].split("\n\n")[0].split(". ")[0] + ".";
   return {
-    title: article.title,
-    description,
-    alternates: { canonical: "/blog/" + slug },
+    ...pageMetadata(article.title, description, "/blog/" + slug),
+    twitter: { card: "summary_large_image" as const, title: article.title, description, images: [cover(slug)] },
     openGraph: {
       type: "article" as const,
       title: article.title,
       description,
       images: [cover(slug)],
+      url: "/blog/" + slug,
+      siteName: "IndieRally",
+      publishedTime: published,
+      authors: ["IndieRally Editorial"],
     },
   };
 }
@@ -48,7 +52,7 @@ export default async function Article({ params }: Props) {
   const { slug } = await params;
   const post = articles.find((item) => item.slug === slug);
   if (!post) notFound();
-  const origin = process.env.SITE_URL || "http://localhost:3000";
+  const origin = siteOrigin();
   return (
     <article className="mx-auto w-[calc(100%-48px)] md:w-[90%] max-[590px]:w-[calc(100%-28px)] min-h-[65vh] pt-12 pb-16 [&_img]:mt-3.5 [&_img]:aspect-[800/460] [&_img]:h-auto [&_img]:w-full [&_img]:rounded-md [&_img]:object-cover grayscale">
       <Link
@@ -72,7 +76,7 @@ export default async function Article({ params }: Props) {
         alt={post.alt}
         width={800}
         height={460}
-        sizes="(max-width: 800px) 100vw, 760px"
+        sizes="90vw"
         preload
       />
       <div className="mt-4 grid gap-[18px] min-[801px]:grid-cols-[235px_minmax(0,1fr)]">
@@ -102,6 +106,8 @@ export default async function Article({ params }: Props) {
           "@context": "https://schema.org",
           "@type": "BlogPosting",
           headline: post.title,
+          mainEntityOfPage: new URL("/blog/" + slug, origin).href,
+          publisher: { "@type": "Organization", name: "IndieRally", url: origin },
           datePublished: published,
           image: new URL(cover(slug), origin).href,
           url: new URL("/blog/" + slug, origin).href,

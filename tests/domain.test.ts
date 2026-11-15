@@ -32,6 +32,13 @@ test("top sort counts recorded votes and slug generation supports accents", () =
   assert.equal(slugify("Déjà Vu!"), "deja-vu");
 });
 
+test("search is case insensitive, supports extra whitespace, and does not mutate input", () => {
+  const original = seed.map(item => item.slug);
+  assert.equal(search(seed, "  VISUAL   NORTH  ", "Design")[0]?.slug, "framepad");
+  search(seed, "", "", "top");
+  assert.deepEqual(seed.map(item => item.slug), original);
+});
+
 test("weekly rounds reset on Monday at midnight UTC", async () => {
   const { startOfRound, nextRound, canVote } = await import("../lib/rounds.ts");
   const sunday = Date.parse("2026-11-15T23:59:59.999Z");

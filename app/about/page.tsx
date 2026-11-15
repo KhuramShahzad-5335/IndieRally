@@ -1,7 +1,8 @@
+import { pageMetadata } from "@/lib/seo";
 import Link from "next/link";
 import { ArrowUpRight, CalendarDays, Search, SquarePen } from "lucide-react";
 
-export const metadata = {title:"About", description:"Learn how IndieRally helps independent makers launch and find their first users.", alternates:{canonical:"/about"}};
+export const metadata = pageMetadata("About", "Learn how IndieRally helps independent makers launch and find their first users.", "/about");
 
 const stages = [
   { icon: SquarePen, title: "Tell us what you built", text: "Submit your product, explain what it helps people do, and link to a place they can see it for themselves." },

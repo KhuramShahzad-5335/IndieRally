@@ -1,6 +1,7 @@
+import { pageMetadata } from "@/lib/seo";
 import Link from "next/link";
 
-export const metadata = { title: "Cancellation and refunds", alternates: { canonical: "/refunds" } };
+export const metadata = pageMetadata("Cancellation and refunds", "Understand cancellations and refund terms for IndieRally directory submission services.", "/refunds");
 
 export default function PolicyPage() {
   return <article className="mx-auto w-[90%] max-w-3xl space-y-7 py-12">

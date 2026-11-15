@@ -1,0 +1,10 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "incremental": false
+  },
+  "include": ["next-env.d.ts", "app/**/*.ts", "app/**/*.tsx", "components/**/*.tsx", "lib/**/*.ts", "tests/**/*.ts", "next.config.ts"],
+  "exclude": ["node_modules", ".next"]
+}

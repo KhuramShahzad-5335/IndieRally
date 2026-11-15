@@ -1,3 +1,4 @@
+import { siteOrigin, pageMetadata, siteDescription } from "@/lib/seo";
 import { ThemeToggle } from "@/components/layout/theme-toggle";
 import { isAdmin } from "@/lib/auth";
 import { UserRound } from "lucide-react";
@@ -12,14 +13,16 @@ import { SiteFooter } from "@/components/layout/site-footer";
 import { BrandLogo } from "@/components/layout/brandLogo";
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.SITE_URL || "http://localhost:3000"),
+  ...pageMetadata("IndieRally — Discover independent software", siteDescription, "/"),
+  alternates: undefined,
+  metadataBase: new URL(siteOrigin()),
   title: {
     default: "IndieRally — Discover independent software",
     template: "%s | IndieRally",
   },
   description:
     "Launch your indie product through a reviewed software directory, weekly launch rounds, and selected spotlights.",
-  openGraph: { type: "website", siteName: "IndieRally" },
+
 };
 export default async function Layout({
   children,

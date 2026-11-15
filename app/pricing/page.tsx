@@ -1,8 +1,9 @@
+import { pageMetadata } from "@/lib/seo";
 import Link from "next/link";
 import { ArrowRight, ClipboardCheck, Layers3, PenLine, Search } from "lucide-react";
 import { plans } from "@/lib/editorial";
 
-export const metadata = {title:"Directory service pricing",description:"Compare IndieRally’s one-time directory submission packages.",alternates:{canonical:"/pricing"}};
+export const metadata = pageMetadata("Directory service pricing", "Compare IndieRally’s one-time directory submission packages.", "/pricing");
 const descriptions = {
   starter: "Get your first directory campaign underway.",
   growth: "Reach a wider mix of directories in your market.",

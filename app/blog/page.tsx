@@ -1,9 +1,10 @@
+import { pageMetadata } from "@/lib/seo";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import { articles, cover } from "@/lib/editorial";
 
-export const metadata = { title: "Blog", description: "Practical guides for software launches, product listings, and directory campaigns.", alternates: { canonical: "/blog" } };
+export const metadata = pageMetadata("Blog", "Practical guides for software launches, product listings, and directory campaigns.", "/blog");
 
 export default function Blog() {
   return <div className="mx-auto min-h-[65vh] w-[calc(100%-32px)] md:w-[90%] py-7 sm:py-10">
@@ -12,7 +13,7 @@ export default function Blog() {
       const words = post.paragraphs.join(" ").trim().split(/\s+/).length;
       return <article key={post.slug} className="group relative grid overflow-hidden rounded-md border border-line bg-surface motion-safe:transition-colors hover:border-muted md:grid-cols-[42%_1fr]">
         <div className="grid place-items-center border-b border-line bg-paper p-4 sm:p-6 md:border-r md:border-b-0">
-          <Image src={cover(post.slug)} width={800} height={460} alt={post.alt} className="aspect-[800/460] w-full rounded-md object-cover grayscale" sizes="(min-width: 1152px) 380px, (min-width: 768px) 38vw, 100vw"/>
+          <Image src={cover(post.slug)} width={800} height={460} alt={post.alt} className="aspect-[800/460] w-full rounded-md object-cover grayscale" sizes="(min-width: 768px) 38vw, 90vw"/>
         </div>
         <div className="min-w-0 p-5">
           <div className="flex items-center justify-between gap-3"><span className="font-mono text-xs tracking-widest text-subtle uppercase">Launch guides</span><ArrowUpRight size={18} aria-hidden className="text-muted group-hover:text-ink"/></div>

@@ -5,8 +5,9 @@
     "dev": "next dev --webpack",
     "build": "next build --webpack",
     "start": "next start",
-    "test": "node --disable-warning=ExperimentalWarning --experimental-strip-types --test tests/domain.test.ts",
-    "typecheck": "tsc --noEmit"
+    "test": "node --disable-warning=ExperimentalWarning --experimental-strip-types --test tests/domain.test.ts tests/seo.test.ts",
+    "typecheck": "tsc --noEmit",
+    "check:unused": "tsc --project tsconfig.audit.json --noEmit"
   },
   "dependencies": {
     "@fontsource-variable/roboto": "^5.3.0",

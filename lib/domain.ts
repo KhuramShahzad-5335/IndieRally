@@ -28,7 +28,10 @@ export const slugify = (name: string) => name.normalize("NFKD").replace(/[\u0300
 export const votes = (listing: Listing) => listing.baseVotes + listing.voters.length;
 export function search(items: Listing[], query = "", category = "", sort = "") {
   const terms = query.trim().toLowerCase().split(/\s+/);
-  return items.filter(item => item.status === "published" && (!category || item.category === category) &&
-    terms.every(term => [item.name, item.tagline, item.description, item.category, item.maker].join(" ").toLowerCase().includes(term)))
+  return items.filter(item => {
+    if (item.status !== "published" || (category && item.category !== category)) return false;
+    const text = [item.name, item.tagline, item.description, item.category, item.maker].join(" ").toLowerCase();
+    return terms.every(term => text.includes(term));
+  })
     .sort((a, b) => (sort === "top" ? votes(b) - votes(a) : 0) || (b.publishedAt ?? "").localeCompare(a.publishedAt ?? "") || a.slug.localeCompare(b.slug));
 }

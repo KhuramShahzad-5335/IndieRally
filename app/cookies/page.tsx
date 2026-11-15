@@ -1,6 +1,7 @@
+import { pageMetadata } from "@/lib/seo";
 import Link from "next/link";
 
-export const metadata = { title: "Cookie policy", alternates: { canonical: "/cookies" } };
+export const metadata = pageMetadata("Cookie policy", "Learn about the cookies and local storage IndieRally uses for sign-in and theme preferences.", "/cookies");
 
 export default function PolicyPage() {
   return <article className="mx-auto w-[90%] max-w-3xl space-y-7 py-12">

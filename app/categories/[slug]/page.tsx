@@ -1,3 +1,4 @@
+import { pageMetadata } from "@/lib/seo";
 import Link from "next/link";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
@@ -16,13 +17,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const category = getCategory(slug);
   if (!category) return { title: "Category unavailable", robots: { index: false } };
-  return { title: category, description: "Discover independent software in " + category + ".", alternates: { canonical: "/categories/" + slug } };
+  return pageMetadata(category, "Discover independent software in " + category + ".", "/categories/" + slug);
 }
 
 export default async function CategoryPage({ params }: Props) {
   const category = getCategory((await params).slug);
   if (!category) notFound();
-  const [account, listings] = await Promise.all([currentAccount(), (await repository()).find({ status: "published" })]);
+  const [account, listings] = await Promise.all([currentAccount(), (await repository()).find({ status: "published", category })]);
   const items = search(listings.filter(item => isLive(item)), "", category);
   return <div className="mx-auto min-h-[65vh] w-[calc(100%-32px)] py-12 md:w-[90%]">
     <Link className="font-mono text-xs uppercase tracking-widest text-muted hover:underline" href="/#directory">← Directory</Link>

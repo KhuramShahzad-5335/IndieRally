@@ -1,3 +1,4 @@
+import { siteOrigin } from "@/lib/seo";
 import { categorySlug } from "@/lib/categories";
 import type { Metadata } from "next";
 import Link from "next/link";
@@ -30,7 +31,7 @@ export async function generateMetadata({
   const params = await searchParams;
   return {
     alternates: { canonical: "/" },
-    ...(Object.values(params).some(Boolean)
+    ...([params.q, params.category, params.sort].some(Boolean)
       ? { robots: { index: false, follow: true } }
       : {}),
   };
@@ -44,7 +45,8 @@ export default async function Home({ searchParams }: { searchParams: Params }) {
     (item) => isLive(item),
   );
   const items = search(all, q, category, sort);
-  const featured = search(all).find((item) => item.featured) ?? search(all)[0];
+  const newest = search(all);
+  const featured = newest.find((item) => item.featured) ?? newest[0];
   const account = await currentAccount();
   const voter = account ? hash(account._id) : undefined;
   return (
@@ -172,7 +174,7 @@ export default async function Home({ searchParams }: { searchParams: Params }) {
           "@context": "https://schema.org",
           "@type": "WebSite",
           name: "IndieRally",
-          url: process.env.SITE_URL || "http://localhost:3000",
+          url: siteOrigin(),
         }}
       />
     </>

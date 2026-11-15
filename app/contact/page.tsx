@@ -1,3 +1,4 @@
+import { pageMetadata } from "@/lib/seo";
 import { Check, Send } from "lucide-react";
 import { FormSection } from "@/components/forms/form-section";
 import Image from "next/image";
@@ -6,7 +7,7 @@ import { inbox } from "@/lib/inquiries";
 import { plans } from "@/lib/editorial";
 import { redirect } from "next/navigation";
 import { ActionForm } from "@/components/forms/action-form";
-export const metadata = {title:"Contact", description:"Send IndieRally a question about listings, launches, or directory submissions.", alternates:{canonical:"/contact"}};
+export const metadata = pageMetadata("Contact", "Send IndieRally a question about listings, launches, or directory submissions.", "/contact");
 async function send(_: string, form: FormData) {
   "use server";
   const read = (key: string) => String(form.get(key) ?? "").trim();

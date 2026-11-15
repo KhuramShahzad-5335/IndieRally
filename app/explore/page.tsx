@@ -1,3 +1,4 @@
+import { pageMetadata } from "@/lib/seo";
 import Link from "next/link";
 import { ArrowUpRight, Radio, Trophy } from "lucide-react";
 import { repository } from "@/lib/store";
@@ -10,7 +11,7 @@ import { currentAccount } from "@/lib/accounts";
 import { hash } from "@/lib/auth";
 
 export const dynamic = "force-dynamic";
-export const metadata = {title:"Explore weekly launches",description:"See this week’s product leaderboard and winners from the last three weeks.",alternates:{canonical:"/explore"}};
+export const metadata = pageMetadata("Explore weekly launches", "See this week’s product leaderboard and winners from the last three weeks.", "/explore");
 const dateKey = (time: number) => new Date(time).toISOString().slice(0,10);
 const dateLabel = (time: number) => new Intl.DateTimeFormat("en",{month:"short",day:"numeric",timeZone:"UTC"}).format(time);
 

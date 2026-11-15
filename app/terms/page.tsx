@@ -1,6 +1,7 @@
+import { pageMetadata } from "@/lib/seo";
 import Link from "next/link";
 
-export const metadata = { title: "Terms of use", alternates: { canonical: "/terms" } };
+export const metadata = pageMetadata("Terms of use", "Read the terms for using IndieRally, submitting products, and requesting launch services.", "/terms");
 
 export default function PolicyPage() {
   return <article className="mx-auto w-[90%] max-w-3xl space-y-7 py-12">

@@ -1,11 +1,11 @@
 import "server-only";
 import { mkdir, readFile, rename, writeFile } from "node:fs/promises";
 import path from "node:path";
-import { MongoClient } from "mongodb";
+import { mongoClient } from "./mongodb";
 import type { Listing } from "./domain";
 import { seed } from "./seed";
 
-type Match = Partial<Pick<Listing, "slug" | "status" | "trackingHash" | "ownerId">>;
+type Match = Partial<Pick<Listing, "slug" | "status" | "trackingHash" | "ownerId" | "category">>;
 interface Repository {
   find(match: Match): Promise<Listing[]>;
   create(listing: Listing): Promise<boolean>;
@@ -54,31 +54,28 @@ const local: Repository = {
     });
   },
 };
-async function mongo(uri: string): Promise<Repository> {
-  const client = new MongoClient(uri, { serverSelectionTimeoutMS: 8000 });
-  try {
-    await client.connect();
-    const collection = client.db(process.env.MONGODB_DB || "launchdeck").collection<Listing>("launchdeck"); await collection.createIndex({ ownerId: 1, submittedAt: -1 });
-    await collection.createIndex({ slug: 1 }, { unique: true });
-    await collection.createIndex({ trackingHash: 1 }, { unique: true, sparse: true });
-    await collection.createIndex({ status: 1, publishedAt: -1 });
-    return {
-      find: async match => (await collection.find(match).toArray()).map(({ _id, ...item }) => item),
-      async create(item) {
-        try { await collection.insertOne(item); return true; }
-        catch (error) { if ((error as { code?: number }).code === 11000) return false; throw error; }
-      },
-      async update(match, fields, event) {
-        return (await collection.updateOne(match, { $set: fields, $push: { history: event } })).matchedCount === 1;
-      },
-      async vote(slug, voter, start, now) {
-        await collection.updateOne({ slug, status: "published", publishedAt: { $gte: start, $lte: now } }, { $addToSet: { voters: voter } });
-      },
-    };
-  } catch (error) { await client.close(); throw error; }
+async function mongo(): Promise<Repository> {
+  const client = await mongoClient();
+  const collection = client.db(process.env.MONGODB_DB || "launchdeck").collection<Listing>("launchdeck"); await collection.createIndex({ ownerId: 1, submittedAt: -1 });
+  await collection.createIndex({ slug: 1 }, { unique: true });
+  await collection.createIndex({ trackingHash: 1 }, { unique: true, sparse: true });
+  await collection.createIndex({ status: 1, publishedAt: -1 });
+  return {
+    find: async match => (await collection.find(match).toArray()).map(({ _id, ...item }) => item),
+    async create(item) {
+      try { await collection.insertOne(item); return true; }
+      catch (error) { if ((error as { code?: number }).code === 11000) return false; throw error; }
+    },
+    async update(match, fields, event) {
+      return (await collection.updateOne(match, { $set: fields, $push: { history: event } })).matchedCount === 1;
+    },
+    async vote(slug, voter, start, now) {
+      await collection.updateOne({ slug, status: "published", publishedAt: { $gte: start, $lte: now } }, { $addToSet: { voters: voter } });
+    },
+  };
 }
 export async function repository() {
   const uri = process.env.MONGODB_URI;
   if (!uri) return local;
-  return shared.launchdeckMongo ??= mongo(uri).catch(error => { delete shared.launchdeckMongo; throw error; });
+  return shared.launchdeckMongo ??= mongo().catch(error => { delete shared.launchdeckMongo; throw error; });
 }

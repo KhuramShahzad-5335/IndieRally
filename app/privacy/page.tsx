@@ -1,6 +1,7 @@
+import { pageMetadata } from "@/lib/seo";
 import Link from "next/link";
 
-export const metadata = { title: "Privacy", alternates: { canonical: "/privacy" } };
+export const metadata = pageMetadata("Privacy", "How IndieRally handles account details, product submissions, contact requests, and your privacy choices.", "/privacy");
 
 export default function Privacy() {
   return <article className="mx-auto w-[90%] max-w-3xl space-y-6 py-12">

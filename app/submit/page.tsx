@@ -5,7 +5,7 @@ import { submit } from "../actions";
 import { ActionForm } from "@/components/forms/action-form";
 import { ProductFields } from "@/components/products/product-fields";
 
-export const metadata: Metadata = { title: "Submit a product", description: "Submit your independent software for review and get a public listing on IndieRally.", alternates: { canonical: "/submit" } };
+export const metadata: Metadata = { title: "Submit a product", robots: { index: false, follow: false }, description: "Submit your independent software for review and get a public listing on IndieRally.", alternates: { canonical: "/submit" } };
 
 export default async function SubmitPage() {
   const accountsEnabled = Boolean(process.env.MONGODB_URI);

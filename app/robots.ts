@@ -1,4 +1,6 @@
 import type { MetadataRoute } from "next";
+import { siteOrigin } from "@/lib/seo";
 export default function robots(): MetadataRoute.Robots {
-  return { rules: { userAgent: "*", allow: "/", disallow: ["/admin", "/status/", "/dashboard", "/profile"] }, sitemap: new URL("/sitemap.xml", process.env.SITE_URL || "http://localhost:3000").href };
+  // Let crawlers see the noindex metadata on private and authentication routes.
+  return { rules: { userAgent: "*", allow: "/" }, sitemap: new URL("/sitemap.xml", siteOrigin()).href };
 }
